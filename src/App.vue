@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Editor msg="Welcome to Your Vue.js App" />
+    <Editor :memberList="memberList" />
   </div>
 </template>
 
@@ -9,6 +9,19 @@ import Editor from './components/Editor.vue'
 
 export default {
   name: 'app',
+  data() {
+    return {
+      memberList: [
+        { name: '张三', id: 'zhangsan' },
+        { name: '李四', id: 'lisi' },
+        { name: '王五', id: 'wangwu' },
+        { name: '赵六', id: 'zhaoliu' },
+        { name: '张三四', id: 'zhangsansi' },
+        { name: '李四五', id: 'lisiwu' },
+        { name: '王五六', id: 'wangwuliu' },
+      ],
+    }
+  },
   components: {
     Editor,
   },
@@ -21,6 +34,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 330px;
 }
 </style>
