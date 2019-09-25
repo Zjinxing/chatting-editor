@@ -12,13 +12,13 @@ export default {
   data() {
     return {
       memberList: [
-        { name: '张三', id: 'zhangsan' },
-        { name: '李四', id: 'lisi' },
-        { name: '王五', id: 'wangwu' },
-        { name: '赵六', id: 'zhaoliu' },
-        { name: '张三四', id: 'zhangsansi' },
-        { name: '李四五', id: 'lisiwu' },
-        { name: '王五六', id: 'wangwuliu' },
+        { name: '张三', id: 'zhangsan', selected: false },
+        { name: '李四', id: 'lisi', selected: false },
+        { name: '王五', id: 'wangwu', selected: false },
+        { name: '赵六', id: 'zhaoliu', selected: false },
+        { name: '张三四', id: 'zhangsansi', selected: false },
+        { name: '李四五', id: 'lisiwu', selected: false },
+        { name: '王五六', id: 'wangwuliu', selected: false },
       ],
     }
   },
