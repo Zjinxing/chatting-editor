@@ -7,7 +7,7 @@
         </span>
         <Emoji @select-emoji="onSelectEmoji" />
       </el-popover>
-      <el-upload action :http-request="insertImg" :show-file-list="false">
+      <el-upload action :http-request="insertFile" :show-file-list="false">
         <FileIcon class="editor-tools-icon" />
       </el-upload>
     </div>
@@ -101,20 +101,24 @@ export default {
     this.getFocus()
   },
   methods: {
-    insertImg(data) {
+    insertFile(data) {
       const { file } = data
-      console.log(file)
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = e => {
-        const { result } = e.target
-        const img = document.createElement('img')
-        img.width = 180
-        img.src = result
-        const sel = document.getSelection()
-        const range = sel.getRangeAt(0)
-        range.insertNode(img)
-        range.collapse()
+      const { type } = file
+      if (type.includes('image')) {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = e => {
+          const { result } = e.target
+          const img = document.createElement('img')
+          img.width = 180
+          img.src = result
+          const sel = document.getSelection()
+          const range = sel.getRangeAt(0)
+          range.insertNode(img)
+          range.collapse()
+        }
+      } else {
+        this.$emit('send-file', file)
       }
     },
     onCompositionstart() {
