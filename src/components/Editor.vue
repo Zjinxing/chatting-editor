@@ -101,6 +101,7 @@ export default {
     this.getFocus()
   },
   methods: {
+    // 发送文件
     insertFile(data) {
       const { file } = data
       const { type } = file
@@ -112,6 +113,7 @@ export default {
           const img = document.createElement('img')
           img.width = 180
           img.src = result
+          this.$refs.editorContent.focus() // 使输入框获取焦点，否则在Firefox上将获得预期外的 sel 和 range
           const sel = document.getSelection()
           const range = sel.getRangeAt(0)
           range.insertNode(img)
@@ -139,14 +141,15 @@ export default {
       const el = this.$refs.editorContent
       const { fontSize, fontFamily } = getComputedStyle(el)
       const canvas = document.createElement('canvas')
-      const width = parseInt(fontSize, 10) * (name.length + 1) + 10
+      const width = parseInt(fontSize, 10) * (name.length + 1) + 6
       const height = parseInt(fontSize, 10) + 6
       canvas.width = width
       canvas.height = height
+      this.getHighRes(canvas)
       const ctx = canvas.getContext('2d')
       ctx.textBaseline = 'top'
       ctx.font = `${fontSize} ${fontFamily}`
-      ctx.fillText(`@${name}`, 5, 3)
+      ctx.fillText(`@${name}`, 3, 3)
       ctx.save()
       const dataURL = canvas.toDataURL()
       const img = document.createElement('img')
@@ -157,7 +160,9 @@ export default {
       sel.removeAllRanges()
       range.insertNode(img)
       range.collapse()
-      sel.addRange(range)
+      img.width = width
+      img.height = height
+      sel.addRange(img)
       this.memberListVisible = false
     },
     getFocus() {
@@ -211,7 +216,7 @@ export default {
     // 上下箭头切换@人员
     arrowSelect(e) {
       console.log('keydown')
-      const LI_HEIGHT = 31 // 一个li的高度
+      const LI_HEIGHT = 30 // 一个li的高度
       const UL_HEIGHT = 150 // ul 高度
       const el = this.$refs.memberList
       if (e.keyCode === 38) {
@@ -299,6 +304,23 @@ export default {
       selection.addRange(range)
       document.execCommand('delete')
     },
+    // 高清屏canvas缩放
+    getHighRes(canvas) {
+      const ctx = canvas.getContext('2d')
+      const dpr = window.devicePixelRatio || window.mozDevicePixelRatio || 1
+      var oldWidth = canvas.width
+      var oldHeight = canvas.height
+      // Give the canvas pixel dimensions of their CSS
+      // size * the device pixel ratio.
+      canvas.width = Math.round(oldWidth * dpr)
+      canvas.height = Math.round(oldHeight * dpr)
+      canvas.style.width = oldWidth + 'px'
+      canvas.style.height = oldHeight + 'px'
+      // Scale all drawing operations by the dpr, so you
+      // don't have to worry about the difference.
+      ctx.scale(dpr, dpr)
+      return ctx
+    },
   },
   components: {
     Emoji,
@@ -359,6 +381,7 @@ export default {
       display: flex;
       align-items: center;
       padding: 5px 12px;
+      height: 30px;
       cursor: pointer;
       text-align: center;
 
